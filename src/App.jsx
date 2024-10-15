@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import SubmissionForm from "./components/SubmissionForm/SubmissionForm";
@@ -36,6 +36,25 @@ function App() {
     }
   };
 
+  const handleSort = (type, order) => {
+  
+    if (type == "income") {
+      if (order == "asc") {
+        const sortedList = incomeList.sort((a, b) => a?.amount - b?.amount);
+        setIncomeList(sortedList);
+      } else {
+        const sortedList = incomeList.sort((a, b) => b?.amount - a?.amount);
+        setIncomeList(sortedList);
+      }
+    } else {
+      if (order == "asc") {
+        setExpenseList((prev) => prev?.sort((a, b) => a?.amount - b?.amount));
+      } else {
+        setExpenseList((prev) => prev?.sort((a, b) => b?.amount - a?.amount));
+      }
+    }
+  };
+
   const netIncome = incomeList?.reduce((a, b) => a + b.amount, 0);
   const netExpense = expenseList?.reduce((a, b) => a + b.amount, 0);
 
@@ -52,8 +71,14 @@ function App() {
           <div className="lg:col-span-2">
             <BalanceStatistics netExpense={netExpense} netIncome={netIncome} />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-8">
-              <IncomeContainer incomeList={incomeList} />
-              <ExpenseContainer expenseList={expenseList} />
+              <IncomeContainer
+                incomeList={incomeList}
+                handleSort={handleSort}
+              />
+              <ExpenseContainer
+                expenseList={expenseList}
+                handleSort={handleSort}
+              />
             </div>
           </div>
         </section>
