@@ -1,19 +1,21 @@
 import React from "react";
 import EditSVG from "../SVGs/EditSVG";
 import DeleteSVG from "../SVGs/DeleteSVG";
+import { formatDate } from "../../../utils";
 
-const SingleItem = () => {
+const SingleItem = ({ item }) => {
+  const { category, amount, date } = item || {};
   return (
     <div className="flex justify-between items-center py-2 relative group cursor-pointer">
       <div>
         <h3 className="text-base font-medium leading-7 text-gray-600">
-          Salary
+          {category}
         </h3>
-        <p className="text-xs text-gray-600">15 January 2024</p>
+        <p className="text-xs text-gray-600">{formatDate(date)}</p>
       </div>
       <div className="flex items-center gap-2">
         <p className="text-base font-semibold text-gray-600 transition-all group-hover:-translate-x-14">
-          BDT 10000
+          BDT {amount}
         </p>
 
         {/* <!-- 3 Dots --> */}

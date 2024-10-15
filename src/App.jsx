@@ -17,17 +17,22 @@ function App() {
       amount: parseInt(amount),
       date,
     };
-    console.log(entries);
-    if (isIncome) {
-      const id =
-        incomeList?.length > 0 ? incomeList[incomeList.length - 1]?.id + 1 : 0;
-      setIncomeList((prev) => [...prev, { id, ...entries }]);
+    if (entries?.amount > 0) {
+      if (isIncome) {
+        const id =
+          incomeList?.length > 0
+            ? incomeList[incomeList.length - 1]?.id + 1
+            : 0;
+        setIncomeList((prev) => [...prev, { id, ...entries }]);
+      } else {
+        const id =
+          expenseList?.length > 0
+            ? expenseList[expenseList.length - 1]?.id + 1
+            : 0;
+        setExpenseList((prev) => [...prev, { id, ...entries }]);
+      }
     } else {
-      const id =
-        expenseList?.length > 0
-          ? expenseList[expenseList.length - 1]?.id + 1
-          : 0;
-      setExpenseList((prev) => [...prev, { id, ...entries }]);
+      alert("Please enter a valid amount");
     }
   };
 
@@ -47,8 +52,8 @@ function App() {
           <div className="lg:col-span-2">
             <BalanceStatistics netExpense={netExpense} netIncome={netIncome} />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-8">
-              <IncomeContainer />
-              <ExpenseContainer />
+              <IncomeContainer incomeList={incomeList} />
+              <ExpenseContainer expenseList={expenseList} />
             </div>
           </div>
         </section>

@@ -90,7 +90,7 @@ const SubmissionForm = ({ isIncome, setIsIncome, onSave }) => {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               type="number"
-              //   name="amount"
+              name="amount"
               id="amount"
               autoComplete="off"
               placeholder="12931"

@@ -4,7 +4,7 @@ import SortingSVG from "../SVGs/SortingSVG";
 import FilterSVG from "../SVGs/FilterSVG";
 import SingleItem from "../SingleItem/SingleItem";
 
-const ExpenseContainer = () => {
+const ExpenseContainer = ({ expenseList }) => {
   return (
     <div className="border rounded-md">
       {/* <!-- Header --> */}
@@ -123,9 +123,10 @@ const ExpenseContainer = () => {
       </div>
 
       <div className="p-4 divide-y">
-        <SingleItem />
-        <SingleItem />
-        <SingleItem />
+        {expenseList?.length > 0 &&
+          expenseList.map((expense) => (
+            <SingleItem key={expense.id} item={expense} />
+          ))}
       </div>
     </div>
   );

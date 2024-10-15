@@ -1,10 +1,8 @@
 import React from "react";
 import IncomeSVG from "../SVGs/IncomeSVG";
-import SortingSVG from "../SVGs/SortingSVG";
-import FilterSVG from "../SVGs/FilterSVG";
 import SingleItem from "../SingleItem/SingleItem";
 
-const IncomeContainer = () => {
+const IncomeContainer = ({ incomeList }) => {
   return (
     <div className="border rounded-md relative">
       {/* <!-- Header --> */}
@@ -129,10 +127,10 @@ const IncomeContainer = () => {
       </div>
 
       <div className="p-4 divide-y">
-       <SingleItem />
-       <SingleItem />
-       <SingleItem />
-       <SingleItem />
+        {incomeList?.length > 0 &&
+          incomeList.map((income) => (
+            <SingleItem key={income.id} item={income} />
+          ))}
       </div>
     </div>
   );
