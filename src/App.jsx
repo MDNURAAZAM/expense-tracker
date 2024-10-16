@@ -20,9 +20,11 @@ function App() {
     date: getDate(),
   });
 
-  
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [clickedId, setClickedId] = useState();
 
   const handleSave = () => {
+    //item for incomeList/expenseList
     const entries = {
       category: categoryList.includes(formData.category)
         ? formData.category
@@ -31,20 +33,49 @@ function App() {
       date: formData.date,
     };
     if (entries?.amount > 0) {
-      if (isIncome) {
-        const id =
-          incomeList?.length > 0
-            ? incomeList[incomeList.length - 1]?.id + 1
-            : 0;
-        setIncomeList((prev) => [...prev, { id, ...entries }]);
+      //valid amount
+      if (isEditMode && typeof clickedId == "number") {
+        //form is in edit mode
+        if (isIncome) {
+          const editedList = incomeList.map((item) => {
+            if (item.id == clickedId) {
+              return { ...item, ...entries };
+            } else {
+              return item;
+            }
+          });
+          setIncomeList(editedList);
+        } else {
+          const editedList = expenseList.map((item) => {
+            if (item.id == clickedId) {
+              return { ...item, ...entries };
+            } else {
+              return item;
+            }
+          });
+          setExpenseList(editedList);
+        }
+        setIsEditMode(false);
+        setClickedId(undefined);
       } else {
-        const id =
-          expenseList?.length > 0
-            ? expenseList[expenseList.length - 1]?.id + 1
-            : 0;
-        setExpenseList((prev) => [...prev, { id, ...entries }]);
+        //form is in normal mode
+        if (isIncome) {
+          const id =
+            incomeList?.length > 0
+              ? incomeList[incomeList.length - 1]?.id + 1
+              : 0;
+          setIncomeList((prev) => [...prev, { id, ...entries }]);
+        } else {
+          const id =
+            expenseList?.length > 0
+              ? expenseList[expenseList.length - 1]?.id + 1
+              : 0;
+          setExpenseList((prev) => [...prev, { id, ...entries }]);
+        }
       }
+      resetFormData();
     } else {
+      //invalid amount
       alert("Please enter a valid amount");
     }
   };
@@ -80,12 +111,30 @@ function App() {
 
   const handleEdit = (type, id) => {
     setIsEditMode(true);
+    let clickedItem;
     if (type == "income") {
       setIsIncome(true);
+      clickedItem = incomeList.find((item) => item.id == id);
     } else {
       setIsIncome(false);
+      clickedItem = expenseList.find((item) => item.id == id);
     }
-    console.log(type, id);
+
+    const { id: clickedId, category, amount, date } = clickedItem;
+    setFormData({
+      category,
+      amount,
+      date,
+    });
+    setClickedId(clickedId);
+  };
+
+  const resetFormData = () => {
+    setFormData({
+      category: categoryList[0],
+      amount: 0,
+      date: getDate(),
+    });
   };
 
   const netIncome = incomeList?.reduce((a, b) => a + b.amount, 0);
