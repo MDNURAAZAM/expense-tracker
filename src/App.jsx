@@ -5,7 +5,7 @@ import SubmissionForm from "./components/SubmissionForm/SubmissionForm";
 import BalanceStatistics from "./components/BalaceStatistics/BalanceStatistics";
 import IncomeContainer from "./components/IncomeContainer/IncomeContainer";
 import ExpenseContainer from "./components/ExpenseContainer/ExpenseContainer";
-import { expenseCategories, getDate, incomeCategories } from "../utils";
+import { expenseCategories, getDate, getTotalAmount, incomeCategories } from "../utils";
 
 function App() {
   const [isIncome, setIsIncome] = useState(false);
@@ -83,10 +83,10 @@ function App() {
   const handleSort = (type, order) => {
     if (type == "income") {
       if (order == "asc") {
-        const sortedList = incomeList.sort((a, b) => a?.amount - b?.amount);
+        const sortedList = [...incomeList].sort((a, b) => a?.amount - b?.amount);
         setIncomeList(sortedList);
       } else {
-        const sortedList = incomeList.sort((a, b) => b?.amount - a?.amount);
+        const sortedList = [...incomeList].sort((a, b) => b?.amount - a?.amount);
         setIncomeList(sortedList);
       }
     } else {
@@ -129,6 +129,7 @@ function App() {
     setClickedId(clickedId);
   };
 
+  //reset form 
   const resetFormData = () => {
     setFormData({
       category: categoryList[0],
@@ -137,8 +138,9 @@ function App() {
     });
   };
 
-  const netIncome = incomeList?.reduce((a, b) => a + b.amount, 0);
-  const netExpense = expenseList?.reduce((a, b) => a + b.amount, 0);
+  //calculate total Income and total expense
+  const netIncome = getTotalAmount(incomeList)
+  const netExpense = getTotalAmount(expenseList)
 
   return (
     <>

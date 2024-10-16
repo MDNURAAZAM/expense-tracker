@@ -35,6 +35,10 @@ export const formatDate = (date) => {
   return formattedDate;
 };
 
+export const getTotalAmount = (items) => {
+  return items?.reduce((a, b) => a + b.amount, 0);
+};
+
 export const incomeCategories = ["Salary", "Outsourcing", "Bond", "Dividend"];
 export const expenseCategories = [
   "Education",
