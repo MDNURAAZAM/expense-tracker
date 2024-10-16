@@ -5,7 +5,12 @@ import SortingSVG from "../SVGs/SortingSVG";
 import FilterSVG from "../SVGs/FilterSVG";
 import { incomeCategories } from "../../../utils";
 
-const IncomeContainer = ({ incomeList, handleSort, handleDelete }) => {
+const IncomeContainer = ({
+  incomeList,
+  handleSort,
+  handleDelete,
+  handleEdit,
+}) => {
   const [sortingExpanded, setSortingExpanded] = useState(false);
   const [filterExpanded, setFilterExpanded] = useState(false);
   const [incomeFilters, setIncomeFilters] = useState([]);
@@ -40,6 +45,10 @@ const IncomeContainer = ({ incomeList, handleSort, handleDelete }) => {
 
   const handleDeleteIncome = (id) => {
     handleDelete("income", id);
+  };
+
+  const handleEditIncome = (id) => {
+    handleEdit("income", id);
   };
 
   const filteredList =
@@ -170,6 +179,7 @@ const IncomeContainer = ({ incomeList, handleSort, handleDelete }) => {
               key={income.id}
               item={income}
               onDelete={handleDeleteIncome}
+              onEdit={handleEditIncome}
             />
           ))}
       </div>

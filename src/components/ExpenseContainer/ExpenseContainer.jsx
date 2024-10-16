@@ -5,7 +5,12 @@ import SortingSVG from "../SVGs/SortingSVG";
 import FilterSVG from "../SVGs/FilterSVG";
 import { expenseCategories } from "../../../utils";
 
-const ExpenseContainer = ({ expenseList, handleSort, handleDelete }) => {
+const ExpenseContainer = ({
+  expenseList,
+  handleSort,
+  handleDelete,
+  handleEdit,
+}) => {
   const [sortingExpanded, setSortingExpanded] = useState(false);
   const [filterExpanded, setFilterExpanded] = useState(false);
 
@@ -41,6 +46,10 @@ const ExpenseContainer = ({ expenseList, handleSort, handleDelete }) => {
 
   const handleDeleteExpense = (id) => {
     handleDelete("expense", id);
+  };
+
+  const handleEditExpense = (id) => {
+    handleEdit("expense", id);
   };
 
   const filteredList =
@@ -168,6 +177,7 @@ const ExpenseContainer = ({ expenseList, handleSort, handleDelete }) => {
               key={expense.id}
               item={expense}
               onDelete={handleDeleteExpense}
+              onEdit={handleEditExpense}
             />
           ))}
       </div>

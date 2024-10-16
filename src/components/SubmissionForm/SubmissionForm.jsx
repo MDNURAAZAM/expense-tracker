@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import { expenseCategories, getDate, incomeCategories } from "../../../utils";
-
-const SubmissionForm = ({ isIncome, setIsIncome, onSave }) => {
-  const categoryList = isIncome ? incomeCategories : expenseCategories;
-  const [category, setCategory] = useState(categoryList[0]);
-  const [amount, setAmount] = useState(0);
-  const [date, setDate] = useState(getDate())
-
+const SubmissionForm = ({
+  isIncome,
+  setIsIncome,
+  onSave,
+  categoryList,
+  formData,
+  setFormData,
+}) => {
+  const { category, amount, date } = formData || {};
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    const cat = categoryList.includes(category) ? category : categoryList[0];
-
-    onSave(cat, amount, date);
+    onSave();
   };
+
   return (
     <div className="p-6 py-8 bg-[#F9FAFB] border rounded-md">
       <h2 className="text-3xl font-semibold leading-7 text-gray-800 text-center">
@@ -52,7 +52,9 @@ const SubmissionForm = ({ isIncome, setIsIncome, onSave }) => {
             <select
               required={true}
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, category: e.target.value }))
+              }
               id="category"
               name="category"
               autoComplete="category-name"
@@ -78,7 +80,9 @@ const SubmissionForm = ({ isIncome, setIsIncome, onSave }) => {
             <input
               required={true}
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, amount: e.target.value }))
+              }
               type="number"
               name="amount"
               id="amount"
@@ -100,7 +104,9 @@ const SubmissionForm = ({ isIncome, setIsIncome, onSave }) => {
             <input
               required={true}
               value={date}
-              onChange={(e) => setDate(e.target.value)}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, date: e.target.value }))
+              }
               type="date"
               name="date"
               id="date"

@@ -5,17 +5,30 @@ import SubmissionForm from "./components/SubmissionForm/SubmissionForm";
 import BalanceStatistics from "./components/BalaceStatistics/BalanceStatistics";
 import IncomeContainer from "./components/IncomeContainer/IncomeContainer";
 import ExpenseContainer from "./components/ExpenseContainer/ExpenseContainer";
+import { expenseCategories, getDate, incomeCategories } from "../utils";
 
 function App() {
   const [isIncome, setIsIncome] = useState(false);
+  const categoryList = isIncome ? incomeCategories : expenseCategories;
+
   const [incomeList, setIncomeList] = useState([]);
   const [expenseList, setExpenseList] = useState([]);
 
-  const handleSave = (category, amount, date) => {
+  const [formData, setFormData] = useState({
+    category: categoryList[0],
+    amount: 0,
+    date: getDate(),
+  });
+
+  
+
+  const handleSave = () => {
     const entries = {
-      category,
-      amount: parseInt(amount),
-      date,
+      category: categoryList.includes(formData.category)
+        ? formData.category
+        : categoryList[0],
+      amount: parseInt(formData.amount),
+      date: formData.date,
     };
     if (entries?.amount > 0) {
       if (isIncome) {
@@ -65,6 +78,16 @@ function App() {
     }
   };
 
+  const handleEdit = (type, id) => {
+    setIsEditMode(true);
+    if (type == "income") {
+      setIsIncome(true);
+    } else {
+      setIsIncome(false);
+    }
+    console.log(type, id);
+  };
+
   const netIncome = incomeList?.reduce((a, b) => a + b.amount, 0);
   const netExpense = expenseList?.reduce((a, b) => a + b.amount, 0);
 
@@ -77,6 +100,9 @@ function App() {
             isIncome={isIncome}
             setIsIncome={setIsIncome}
             onSave={handleSave}
+            categoryList={categoryList}
+            formData={formData}
+            setFormData={setFormData}
           />
           <div className="lg:col-span-2">
             <BalanceStatistics netExpense={netExpense} netIncome={netIncome} />
@@ -85,11 +111,13 @@ function App() {
                 incomeList={incomeList}
                 handleSort={handleSort}
                 handleDelete={handleDelete}
+                handleEdit={handleEdit}
               />
               <ExpenseContainer
                 expenseList={expenseList}
                 handleSort={handleSort}
                 handleDelete={handleDelete}
+                handleEdit={handleEdit}
               />
             </div>
           </div>
