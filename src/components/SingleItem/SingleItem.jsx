@@ -3,8 +3,8 @@ import EditSVG from "../SVGs/EditSVG";
 import DeleteSVG from "../SVGs/DeleteSVG";
 import { formatDate } from "../../../utils";
 
-const SingleItem = ({ item }) => {
-  const { category, amount, date } = item || {};
+const SingleItem = ({ item, onDelete }) => {
+  const { category, amount, date, id } = item || {};
   return (
     <div className="flex justify-between items-center py-2 relative group cursor-pointer">
       <div>
@@ -28,7 +28,12 @@ const SingleItem = ({ item }) => {
             <EditSVG />
           </button>
 
-          <button className="hover:text-red-600" role="button" title="Delete">
+          <button
+            onClick={() => onDelete(id)}
+            className="hover:text-red-600"
+            role="button"
+            title="Delete"
+          >
             <DeleteSVG />
           </button>
         </div>

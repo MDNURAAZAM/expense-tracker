@@ -1,22 +1,12 @@
 import React, { useState } from "react";
-import { getDate } from "../../../utils";
+import { expenseCategories, getDate, incomeCategories } from "../../../utils";
 
 const SubmissionForm = ({ isIncome, setIsIncome, onSave }) => {
-  const categoryList = isIncome
-    ? ["Salary", "Outsourcing", "Bond", "Dividend"]
-    : [
-        "Education",
-        "Food",
-        "Health",
-        "Bill",
-        "Insurance",
-        "Tax",
-        "Transport",
-        "Telephone",
-      ];
+  const categoryList = isIncome ? incomeCategories : expenseCategories;
   const [category, setCategory] = useState(categoryList[0]);
   const [amount, setAmount] = useState(0);
-  const [date, setDate] = useState(getDate());
+  const [date, setDate] = useState(getDate())
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const cat = categoryList.includes(category) ? category : categoryList[0];

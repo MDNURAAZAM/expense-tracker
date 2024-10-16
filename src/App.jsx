@@ -37,7 +37,6 @@ function App() {
   };
 
   const handleSort = (type, order) => {
-  
     if (type == "income") {
       if (order == "asc") {
         const sortedList = incomeList.sort((a, b) => a?.amount - b?.amount);
@@ -51,6 +50,17 @@ function App() {
         setExpenseList((prev) => prev?.sort((a, b) => a?.amount - b?.amount));
       } else {
         setExpenseList((prev) => prev?.sort((a, b) => b?.amount - a?.amount));
+      }
+    }
+  };
+
+  const handleDelete = (type, id) => {
+    let confirmDelete = confirm("Do you really want to delete this item?");
+    if (confirmDelete) {
+      if (type === "income") {
+        setIncomeList((prev) => prev.filter((item) => item.id != id));
+      } else {
+        setExpenseList((prev) => prev.filter((item) => item.id != id));
       }
     }
   };
@@ -74,10 +84,12 @@ function App() {
               <IncomeContainer
                 incomeList={incomeList}
                 handleSort={handleSort}
+                handleDelete={handleDelete}
               />
               <ExpenseContainer
                 expenseList={expenseList}
                 handleSort={handleSort}
+                handleDelete={handleDelete}
               />
             </div>
           </div>

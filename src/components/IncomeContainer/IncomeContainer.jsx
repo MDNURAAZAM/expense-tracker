@@ -3,16 +3,20 @@ import IncomeSVG from "../SVGs/IncomeSVG";
 import SingleItem from "../SingleItem/SingleItem";
 import SortingSVG from "../SVGs/SortingSVG";
 import FilterSVG from "../SVGs/FilterSVG";
+import { incomeCategories } from "../../../utils";
 
-const IncomeContainer = ({ incomeList, handleSort }) => {
+const IncomeContainer = ({ incomeList, handleSort, handleDelete }) => {
   const [sortingExpanded, setSortingExpanded] = useState(false);
   const [filterExpanded, setFilterExpanded] = useState(false);
+  const [incomeFilters, setIncomeFilters] = useState([]);
+
   const handleSortingIconClick = () => {
     setSortingExpanded((e) => !e);
     if (filterExpanded) {
       setFilterExpanded(false);
     }
   };
+
   const handleFilterIconClick = () => {
     setFilterExpanded((e) => !e);
     if (sortingExpanded) {
@@ -21,9 +25,30 @@ const IncomeContainer = ({ incomeList, handleSort }) => {
   };
 
   const handleSortClick = (order) => {
-    setSortingExpanded(false)
+    setSortingExpanded(false);
     handleSort("income", order);
   };
+
+  const handleFilterClick = (value) => {
+    const valueIncluded = incomeFilters.includes(value);
+    if (valueIncluded) {
+      setIncomeFilters((prev) => prev?.filter((expense) => expense != value));
+    } else {
+      setIncomeFilters((prev) => [...prev, value]);
+    }
+  };
+
+  const handleDeleteIncome = (id) => {
+    handleDelete("income", id);
+  };
+
+  const filteredList =
+    incomeFilters?.length > 0
+      ? incomeList.filter((expense) =>
+          incomeFilters.includes(expense?.category)
+        )
+      : incomeList;
+
   return (
     <div className="border rounded-md relative">
       {/* <!-- Header --> */}
@@ -116,39 +141,21 @@ const IncomeContainer = ({ incomeList, handleSort }) => {
                 id="filter-dropdown"
               >
                 <div className="py-1" role="none">
-                  <label className="inline-flex items-center px-4 py-2 text-sm text-gray-700">
-                    <input
-                      type="checkbox"
-                      className="form-checkbox h-4 w-4 rounded-md text-gray-600"
-                      id="filter-option-1"
-                    />
-                    <span className="ml-2">Salary</span>
-                  </label>
-                  <label className="inline-flex items-center px-4 py-2 text-sm text-gray-700">
-                    <input
-                      type="checkbox"
-                      className="form-checkbox h-4 w-4 rounded-md text-gray-600"
-                      id="filter-option-2"
-                    />
-                    <span className="ml-2">Outsourcing</span>
-                  </label>
-                  <label className="inline-flex items-center px-4 py-2 text-sm text-gray-700">
-                    <input
-                      type="checkbox"
-                      className="form-checkbox h-4 w-4 rounded-md text-gray-600"
-                      id="filter-option-3"
-                    />
-                    <span className="ml-2">Bond</span>
-                  </label>
-
-                  <label className="inline-flex items-center px-4 py-2 text-sm text-gray-700">
-                    <input
-                      type="checkbox"
-                      className="form-checkbox h-4 w-4 rounded-md text-gray-600"
-                      id="filter-option-3"
-                    />
-                    <span className="ml-2">Dividend</span>
-                  </label>
+                  {incomeCategories?.map((category) => (
+                    <label
+                      className="inline-flex items-center px-4 py-2 text-sm text-gray-700"
+                      key={category}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={incomeFilters?.includes(category)}
+                        onChange={() => handleFilterClick(category)}
+                        className="form-checkbox h-4 w-4 rounded-md text-gray-600"
+                        id="filter-option-1"
+                      />
+                      <span className="ml-2">{category}</span>
+                    </label>
+                  ))}
                 </div>
               </div>
             )}
@@ -157,9 +164,13 @@ const IncomeContainer = ({ incomeList, handleSort }) => {
       </div>
 
       <div className="p-4 divide-y">
-        {incomeList?.length > 0 &&
-          incomeList.map((income) => (
-            <SingleItem key={income.id} item={income} />
+        {filteredList?.length > 0 &&
+          filteredList.map((income) => (
+            <SingleItem
+              key={income.id}
+              item={income}
+              onDelete={handleDeleteIncome}
+            />
           ))}
       </div>
     </div>
